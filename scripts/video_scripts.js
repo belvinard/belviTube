@@ -153,6 +153,42 @@ $(document).ready(function() {
 
     function getTimeAgo(dateTime) {
         const minute = 60, hour = minute * 60, day = hour * 24, week = day * 7;
+        const month = day * 30, year = day * 365;
+    
+        let delta = (new Date() - new Date(dateTime)) / 1000;
+    
+        if (delta < 30) {
+            return 'Commented just now';
+        } else if (delta < minute) {
+            return 'Commented ' + Math.floor(delta) + ' seconds ago';
+        } else if (delta < 2 * minute) {
+            return 'Commented a minute ago';
+        } else if (delta < hour) {
+            return 'Commented ' + Math.floor(delta / minute) + ' minutes ago';
+        } else if (delta < day) {
+            return 'Commented ' + Math.floor(delta / hour) + ' hours ago';
+        } else if (delta < day * 2) {
+            return 'Commented yesterday';
+        } else if (delta < week) {
+            return 'Commented ' + Math.floor(delta / day) + ' days ago';
+        } else if (delta < week * 2) {
+            return 'Commented last week';
+        } else if (delta < month) {
+            return 'Commented ' + Math.floor(delta / week) + ' weeks ago';
+        } else if (delta < month * 2) {
+            return 'Commented last month';
+        } else if (delta < year) {
+            const months = Math.floor(delta / month);
+            return 'Commented ' + months + ' month' + (months > 1 ? 's' : '') + ' ago';
+        } else {
+            const years = Math.floor(delta / year);
+            return 'Commented ' + years + ' year' + (years > 1 ? 's' : '') + ' ago';
+        }
+    }
+    
+
+    /*function getTimeAgo(dateTime) {
+        const minute = 60, hour = minute * 60, day = hour * 24, week = day * 7; month = day * 30, year = day * 365;
         let delta = (new Date() - new Date(dateTime)) / 1000;
         if (delta < 30) {
             return 'Commented just now';
@@ -175,7 +211,7 @@ $(document).ready(function() {
         } else {
             return 'Commented ' + Math.floor(delta / week) + ' weeks ago';
         }
-    }
+    }*/
     
 
     // Function to load comments and display "time ago" format
@@ -276,6 +312,8 @@ $(document).ready(function() {
     });
     /* =============================== sidebar js ends =============================== */
 
+    /* =============================== like and dislike js starts =============================== */
+
     const likeCountDisplay = $('.like-count');
     const dislikeCountDisplay = $('.dislike-count');
     const likeButton = $('.like-button');
@@ -369,63 +407,11 @@ $(document).ready(function() {
     });
 
     // Exemple de requête AJAX pour récupérer le nombre de likes
+    
+    /* =============================== like and dislike js ends =============================== */
+
+    /* =============================== subscribers js starts =============================== */
+
+    /* =============================== subscribers js ends =============================== */
 
 });
-
-/* =============================== like and dislike js starts =============================== */
-
-/*$(window).on('load', async function() {
-    const likeCountDisplay = $('.like-count');
-    const dislikeCountDisplay = $('.dislike-count');
-    const likeButton = $('.like-button');
-    const dislikeButton = $('.dislike-button');
-
-    async function fetchInitialCounts() {
-        try {
-            const responseLike = await fetch('video.php?action=fetchLikeCount');
-            const responseDislike = await fetch('video.php?action=fetchDislikeCount');
-
-            const initialLikeCount = await responseLike.text();
-            const initialDislikeCount = await responseDislike.text();
-
-            likeCountDisplay.text(`${initialLikeCount} Likes`);
-            dislikeCountDisplay.text(`${initialDislikeCount} Dislikes`);
-        } catch (error) {
-            console.error('Error fetching initial counts:', error);
-        }
-    }
-
-    async function incrementCount(action) {
-        try {
-            const response = await fetch('video.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    action: action
-                })
-            });
-
-            const updatedCount = await response.text();
-
-            if (action === 'like') {
-                likeCountDisplay.text(`${updatedCount} Likes`);
-            } else if (action === 'dislike') {
-                dislikeCountDisplay.text(`${updatedCount} Dislikes`);
-            }
-        } catch (error) {
-            console.error(`Error incrementing ${action} count:`, error);
-        }
-    }
-
-    await fetchInitialCounts();
-
-    likeButton.click(function() {
-        incrementCount('like');
-    });
-
-    dislikeButton.click(function() {
-        incrementCount('dislike');
-    });
-});*/
