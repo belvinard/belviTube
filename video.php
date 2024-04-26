@@ -16,6 +16,7 @@
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage() . "<br>";
     }
@@ -83,35 +84,35 @@
     /* ====================================== like and dislike php starts ====================================== */
 
     // Function to fetch the current like count from the database
-function fetchLikeCount($conn_comments) {
-    $sql = "SELECT like_count FROM like_counter WHERE id = 1";
-    $stmt = $conn_comments->query($sql);
-    // $row = $stmt->fetch();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row ? $row['like_count'] : 0;
-}
-
-// Function to fetch the current dislike count from the database
-function fetchDislikeCount($conn_comments) {
-    $sql = "SELECT dislike_count FROM dislike_counter WHERE id = 1";
-    $stmt = $conn_comments->query($sql);
-    // $row = $stmt->fetch();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row ? $row['dislike_count'] : 0;
-}
-
-// Check if a GET request is received to fetch initial counts
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    if ($_GET['action'] === 'fetchLikeCount') {
-        header('Content-Type: application/json');
-        echo json_encode(['like_count' => fetchLikeCount($conn_comments)]);
-        exit; // Arrête l'exécution après l'envoi de la réponse JSON
-    } elseif ($_GET['action'] === 'fetchDislikeCount') {
-        header('Content-Type: application/json');
-        echo json_encode(['dislike_count' => fetchDislikeCount($conn_comments)]);
-        exit; // Arrête l'exécution après l'envoi de la réponse JSON
+    function fetchLikeCount($conn_comments) {
+        $sql = "SELECT like_count FROM like_counter WHERE id = 1";
+        $stmt = $conn_comments->query($sql);
+        // $row = $stmt->fetch();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['like_count'] : 0;
     }
-}
+
+    // Function to fetch the current dislike count from the database
+    function fetchDislikeCount($conn_comments) {
+        $sql = "SELECT dislike_count FROM dislike_counter WHERE id = 1";
+        $stmt = $conn_comments->query($sql);
+        // $row = $stmt->fetch();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $row['dislike_count'] : 0;
+    }
+
+    // Check if a GET request is received to fetch initial counts
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+        if ($_GET['action'] === 'fetchLikeCount') {
+            header('Content-Type: application/json');
+            echo json_encode(['like_count' => fetchLikeCount($conn_comments)]);
+            exit; // Arrête l'exécution après l'envoi de la réponse JSON
+        } elseif ($_GET['action'] === 'fetchDislikeCount') {
+            header('Content-Type: application/json');
+            echo json_encode(['dislike_count' => fetchDislikeCount($conn_comments)]);
+            exit; // Arrête l'exécution après l'envoi de la réponse JSON
+        }
+    }
 
 // Check if a POST request is received to increment the count
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -131,33 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         exit; // Arrête l'exécution après l'envoi de la réponse JSON
     }
 }
-
-
-// Check if a GET request is received to fetch initial counts
-/*if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    if ($_GET['action'] === 'fetchLikeCount') {
-        echo fetchLikeCount($conn_comments);
-    } elseif ($_GET['action'] === 'fetchDislikeCount') {
-        echo fetchDislikeCount($conn_comments);
-    }
-}
-
-// Check if a POST request is received to increment the count
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'like') {
-        $sql = "UPDATE like_counter SET like_count = like_count + 1 WHERE id = 1";
-        $stmt = $conn_comments->prepare($sql);
-        $stmt->execute();
-        echo fetchLikeCount($conn_comments); // Output the updated like count
-    } elseif ($_POST['action'] === 'dislike') {
-        $sql = "UPDATE dislike_counter SET dislike_count = dislike_count + 1 WHERE id = 1";
-        $stmt = $conn_comments->prepare($sql);
-        $stmt->execute();
-        echo fetchDislikeCount($conn_comments); // Output the updated dislike count
-    }
-}
-*/
-
 
     /* ====================================== like and dislike php ends ====================================== */
 ?>
@@ -255,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             <div class="sidebar-link">
                 <img src="image/home.svg">
-                <a class="icon-title" href="index.html">Home</a>
+                <a class="icon-title" href="index.php">Home</a>
             </div>
 
             <div class="sidebar-link">
@@ -347,9 +321,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     <img src="image/subscribers4.svg">
                     <div>
                         <p>Easy Tutorials</p>
-                        <span>500k Suscribers</span>
+                        <span class="subscribers-numbers"></span>
                     </div>
-                    <button type="button">Suscribe</button>
+                    <button type="button" class="subscribers-button">Subscribe</button>
+
                 </div>
 
                 <div class="vid-description">
@@ -429,7 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <!-- Include your custom JavaScript file -->
     <script src="scripts/video_scripts.js"></script>   
 
-    <!-- <script src="scripts/like-script.js"></script> -->
+    <script src="scripts/subscribers-script.js"></script>
 
 </body>
 </html>
